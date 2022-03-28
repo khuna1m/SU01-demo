@@ -1,6 +1,6 @@
 # importing Flask and other modules
 from flask import Flask, request, render_template
-from model import predict
+# from model import predict
 from pandas import read_csv
   
 # Flask constructor
@@ -13,9 +13,11 @@ def display():
     if request.method == "POST":
        # getting input with name = fname in HTML form
        currency = request.form.get("crypto")
-       #predict(currency)
+       fromDate = request.form.get("start")
+       toDate = request.form.get("end")
+       #predict(currency, fromDate, toDate)
        data = read_csv('predicted_result.csv')
-       return render_template('table.html', row_data=data.values.tolist(), column_names=data.columns.values, coin=currency)
+       return render_template('table.html', row_data=data.values.tolist(), column_names=data.columns.values, coin=currency, start=fromDate, end=toDate)
     return render_template("form.html")
   
 if __name__=='__main__':

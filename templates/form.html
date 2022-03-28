@@ -1,4 +1,6 @@
 <form action="{{ url_for("display")}}" method="post">
 <label for="crypto">Currency:</label>
 <input type="text" id="crypto" name="crypto" placeholder="Select cryptocurrency">
-<button type="submit">Login</button>
+<input type="text" id="start" name="start" placeholder="dd/mm/yyyy">
+<input type="text" id="end" name="end" placeholder="dd/mm/yyyy">
+<button type="submit">Predict</button>

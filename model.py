@@ -13,9 +13,9 @@ import os
 import pprint
 import tensorflow as tf
 
-def predict(currency):
+def predict(currency, fromDate, toDate):
     #DATA INGESTION
-    data = investpy.get_crypto_historical_data(crypto=currency, from_date='01/10/2019', to_date='01/10/2021')
+    data = investpy.get_crypto_historical_data(crypto=currency, from_date=fromDate, to_date=toDate)
     #print(data)
     data.to_csv('historical_data.csv')
 
@@ -74,15 +74,16 @@ def predict(currency):
         test_label[j - len_t] = test_label[j - len_t] * temp + temp
         predicted[j - len_t] = predicted[j - len_t] * temp + temp
 
+    fd = fromDate.split('/')
     #RESULT PREPARATION TO EXPORT
     import datetime
     df = pd.DataFrame(data).copy()
-    datelist = pd.date_range(datetime.datetime(2019, 10, 1).strftime('%Y-%m-%d'), periods=df.shape[0]).tolist()
+    datelist = pd.date_range(datetime.datetime(fd[2], fd[1], fd[0]).strftime('%Y-%m-%d'), periods=df.shape[0]).tolist()
     df['Timestamp'] = datelist 
     df = df.set_index(['Timestamp'])
     df['Actual'] = df['Close']
     df['Predicted'] = df['Close']
-    df.iloc[-171:,-1:] = predicted
+    df.iloc[-predicted.size:,-1:] = predicted
     df = df.drop(['Date', 'Currency', 'Open', 'Close', 'High', 'Low', 'Volume'], axis = 1)
     print(df)
     df.to_csv('predicted_result.csv')
